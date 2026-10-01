@@ -4,7 +4,7 @@ A grande novidade desta versão são as chamadas: agora é possível fazer, aten
 
 NOVIDADES
 
-- Altere o seu perfil do WhatsApp pelo WinZapp. O novo item "Definições do WhatsApp" no menu Ficheiro abre uma janela para atualizar o seu estado e a sua fotografia de perfil, sem pegar no telemóvel. Deixe um campo vazio para o manter como está.
+- Altere o seu perfil e a sua privacidade do WhatsApp pelo WinZapp. O novo item "Definições do WhatsApp" no menu Ficheiro abre uma janela para atualizar o seu nome de apresentação, o seu estado e a sua fotografia de perfil e, no separador Privacidade, escolher quem vê a sua última vez visto, o seu estado online, o seu estado e a sua fotografia, quem o pode adicionar a grupos e se a confirmação de leitura fica ligada, tudo sem pegar no telemóvel. Deixe um campo vazio para o manter como está.
 
 - Chamadas de voz e de vídeo. Numa conversa individual, os botões "Ligação de voz" (Ctrl+Shift+V) e "Chamada de vídeo" (Ctrl+Alt+Shift+V) fazem a chamada no próprio WinZapp. A chamada abre uma janela com botões acessíveis com Tab e atalhos próprios: Ctrl+M silencia ou reativa o microfone, Ctrl+V liga ou desliga a câmara numa chamada de vídeo, Ctrl+P transforma uma chamada de voz em chamada de vídeo, Ctrl+C abre as definições da chamada e Ctrl+Shift+Q desliga. O leitor de ecrã avisa quando a chamada liga, quando está a restabelecer a ligação e quando termina.
 

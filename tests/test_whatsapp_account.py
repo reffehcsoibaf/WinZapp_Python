@@ -66,19 +66,38 @@ def calls(monkeypatch):
 
 
 class TestSwitches:
-    def test_both_stay_off_until_the_pinned_wa_js_has_the_fixes(self):
-        """4.6.0 throws in both (wa-js#3658 and #3659). Flipping these is the
-        whole change that turns the features on."""
-        assert account.PRIVACY_TAB_ENABLED is False
-        assert account.PROFILE_NAME_ENABLED is False
+    PACKAGE = json.loads(_read("api_patches", "package.json"))["dependencies"]
+    PIN = PACKAGE["@wppconnect/wa-js"]
+
+    @staticmethod
+    def _version(text):
+        return tuple(int(part) for part in text.split("."))
+
+    def test_the_pin_is_an_exact_release_with_both_fixes(self):
+        """4.6.0 throws in both (wa-js#3658 and #3659); 4.6.1 has the fixes."""
+        assert re.fullmatch(r"\d+\.\d+\.\d+", self.PIN), self.PIN
+        assert self._version(self.PIN) >= (4, 6, 1)
+
+    def test_both_are_on_while_the_pin_has_the_fixes(self):
+        assert account.PRIVACY_TAB_ENABLED is True
+        assert account.PROFILE_NAME_ENABLED is True
+
+    def test_the_switches_and_the_pin_never_disagree(self):
+        """On a wa-js older than 4.6.1 the setters throw, so a switch left on
+        would offer a tab that always fails. If the pin goes back to 4.6.0, both
+        switches have to go back to False."""
+        has_the_fixes = self._version(self.PIN) >= (4, 6, 1)
+        assert has_the_fixes or not (
+            account.PRIVACY_TAB_ENABLED or account.PROFILE_NAME_ENABLED
+        )
 
     def test_a_name_left_in_a_disabled_field_never_reaches_the_server(self):
-        changes = account.profile_changes("Someone", "hi", None)
+        changes = account.profile_changes("Someone", "hi", None, name_enabled=False)
         assert changes.name == ""
         assert changes.status == "hi"
 
-    def test_the_name_is_sent_once_enabled(self):
-        changes = account.profile_changes("  Someone ", "", None, name_enabled=True)
+    def test_the_name_is_sent_while_enabled(self):
+        changes = account.profile_changes("  Someone ", "", None)
         assert changes.name == "Someone"
 
 
@@ -309,6 +328,9 @@ class TestWiring:
         assert "mw.fetch_privacy_settings()" in self.DIALOG
         assert "account.not_confirmed(" in self.DIALOG
         assert "wa_privacy_not_confirmed_msg" in self.DIALOG
+
+    def test_the_name_field_is_only_disabled_when_the_switch_is_off(self):
+        assert "if not account.PROFILE_NAME_ENABLED:" in self.DIALOG
 
     def test_the_server_routes_exist_for_both_calls(self):
         routes = _read("api_patches", "src", "routes", "index.ts")

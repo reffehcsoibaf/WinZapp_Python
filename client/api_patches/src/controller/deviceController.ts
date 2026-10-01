@@ -4594,9 +4594,10 @@ export async function setPrivacySetting(req: Request, res: Response) {
    *
    * These setters threw "setPrivacyForOneCategory is not a function" on
    * @wppconnect/wa-js 4.6.0 (wppconnect-team/wa-js#3658, fixed by wa-js PR
-   * #3632 and not yet in a release), so on 4.6.0 this answers 500 with that
-   * message. The client keeps the Privacy tab off until the pinned wa-js has
-   * the fix (PRIVACY_TAB_ENABLED in ui/dialogs/whatsapp_settings_dialog.py).
+   * #3632, released in 4.6.1), so on 4.6.0 this answers 500 with that message.
+   * api_patches/package.json pins 4.6.1 (docs/traps/wa-js-pin.md);
+   * PRIVACY_TAB_ENABLED in core/whatsapp_account.py must be False if that pin
+   * is ever reverted below 4.6.1.
    */
   const { setting, value } = req.body;
   const fnName = PRIVACY_SETTERS[setting];

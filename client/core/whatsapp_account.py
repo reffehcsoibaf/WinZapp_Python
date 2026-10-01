@@ -6,20 +6,21 @@ local server live in main_window/whatsapp_account.py.
 
 from dataclasses import dataclass
 
-# Both features need a wa-js newer than the 4.6.0 this repo pins (see
-# docs/traps/send-contract.md for the pinning rules):
+# Both features need wa-js 4.6.1 or newer (4.6.0 has neither fix):
 #
 # * Privacy: the six WPP.privacy.set* setters throw "setPrivacyForOneCategory is
 #   not a function" on 4.6.0 (wppconnect-team/wa-js#3658, fixed by PR #3632).
 # * Display name: Whatsapp.setProfileName() throws "setPushname is not a
 #   function" on 4.6.0 (wppconnect-team/wa-js#3659, fixed by PR #3682).
 #
-# Off until the pinned wa-js carries both fixes. Flipping them is the whole
-# change: the tab, the routes (api_patches /privacy, /privacy/set) and the
-# strings are already in place, and the calls are covered by tests. About text
-# and photo go through WPPConnect Server's own routes and work on 4.6.0.
-PRIVACY_TAB_ENABLED = False
-PROFILE_NAME_ENABLED = False
+# Both fixes shipped in wa-js 4.6.1 (2026-10-02). These two switches are ON only
+# because client/api_patches/package.json pins that version or a newer one
+# (docs/traps/wa-js-pin.md): if it ever goes back to 4.6.0, set both to False —
+# the tab, the name field and the routes then simply disappear, and About text
+# and photo (which need no fix) keep working. tests/test_whatsapp_account.py
+# fails if the switches and the pin disagree.
+PRIVACY_TAB_ENABLED = True
+PROFILE_NAME_ENABLED = True
 
 
 @dataclass(frozen=True)
